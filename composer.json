@@ -1,0 +1,20 @@
+{
+    "name": "fanamurov/larrock-contact",
+    "description": "Send forms component for larrockCMS",
+    "type": "library",
+    "license": "BSD",
+    "authors": [
+        {
+            "name": "Alexandr Fanamurov",
+            "email": "fanamurov@ya.ru"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Larrock\\ComponentContact\\": "src"
+        }
+    },
+    "require": {
+        "fanamurov/larrock-core": "^0.1"
+    }
+}
