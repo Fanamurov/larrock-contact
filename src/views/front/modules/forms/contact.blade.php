@@ -14,5 +14,5 @@
     <div class="clearfix"></div>
 </form>
 @push('scripts')
-    {!! JsValidator::formRequest('App\Http\Requests\ContactRequest', '#form-contact') !!}
+    {!! JsValidator::formRequest('Larrock\ComponentContact\Requests\ContactRequest', '#form-contact') !!}
 @endpush
