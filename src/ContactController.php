@@ -22,6 +22,7 @@ class ContactController extends Controller
 		$validator = Validator::make($request->all(), [
 			'name' => 'required',
 			'contact' => 'required',
+			'agree' => 'required',
 		]);
 		if($validator->fails()){
 			return back()->withInput($request->except('password'))->withErrors($validator);
@@ -44,11 +45,7 @@ class ContactController extends Controller
 				);
 			});
 		
-		if($send){
-			Alert::add('success', 'Форма отправлена')->flash();
-		}else{
-			Alert::add('danger', 'Форма не отправлена')->flash();
-		}
+		Alert::add('success', 'Форма отправлена')->flash();
 		return back();
 	}
 }
