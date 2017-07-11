@@ -13,6 +13,8 @@ class LarrockComponentContactServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        $this->loadRoutesFrom(__DIR__.'/routes.php');
+
         $this->loadViewsFrom(__DIR__.'/views', 'larrock');
 
         $this->publishes([
@@ -25,8 +27,5 @@ class LarrockComponentContactServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function register()
-    {
-        include __DIR__.'/routes.php';
-    }
+    public function register(){}
 }
