@@ -17,5 +17,12 @@
     },
     "require": {
         "fanamurov/larrock-core": "^0.1"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Larrock\\ComponentContact\\LarrockComponentContactServiceProvider"
+            ]
+        }
     }
 }
