@@ -14,7 +14,7 @@ if(file_exists(base_path(). '/vendor/fanamurov/larrock-discount')){
 }
 
 Route::group(['middleware' => $middlewares], function(){
-    Route::post('/forms/contact', [
-        'as' => 'submit.contacts', 'uses' => ContactController::class .'@send_form'
+    Route::post('/forms/send', [
+        'as' => 'submit.form', 'uses' => ContactController::class .'@send_form'
     ]);
 });

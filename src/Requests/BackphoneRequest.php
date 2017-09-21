@@ -4,7 +4,7 @@ namespace Larrock\ComponentContact\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ContactRequest extends FormRequest
+class BackphoneRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,10 +23,6 @@ class ContactRequest extends FormRequest
      */
     public function rules()
     {
-		return [
-			'name' => 'required|max:255',
-			'contact' => 'required',
-            'agree' => 'required',
-		];
+        return config('larrock-form.backphone.rules');
     }
 }

@@ -16,7 +16,8 @@
         }
     },
     "require": {
-        "fanamurov/larrock-core": "^0.2"
+        "fanamurov/larrock-core": "^0.2",
+        "albertcht/invisible-recaptcha": "^1.7"
     },
     "extra": {
         "laravel": {
