@@ -8,16 +8,14 @@
     </div>
     <div class="uk-form-row">
         <label class="uk-form-label agree-label">
-            <input type="checkbox" name="agree"> Я согласен на обработку персональных данных
+            <input type="checkbox" name="agree"> <span>Я согласен на обработку персональных данных</span>
         </label>
     </div>
-    <div class="uk-form-row">
-        @captcha()
-    </div>
     <div class="uk-form-row uk-text-right">
+        @captcha()
         {{ csrf_field() }}
         <input type="hidden" name="form" value="backphone">
-        <button type="submit" class="uk-button uk-button-large uk-button-primary">Перезвонить мне</button>
+        <button type="submit" class="uk-button uk-button-primary">Перезвонить мне</button>
     </div>
 </form>
 {!! JsValidator::formRequest('Larrock\ComponentContact\Requests\BackphoneRequest', '#form-backphone')->render() !!}
