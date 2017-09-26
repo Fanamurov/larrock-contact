@@ -21,11 +21,26 @@ class ContactController extends Controller
 		}
 
 		$mails = array_map('trim', explode(',',config('larrock-form.'. $request->get('form') .'.emails')));
+		if($request->has('email') && !empty($request->get('email'))){
+		    $mails[] = $request->get('email');
+        }
+
+        $uploaded_file = NULL;
+        if($request->hasFile('file')) {
+            $file = $request->file('file');
+            if($file->isValid()){
+                $filename = date('Ymd-hsi'). $file->getClientOriginalName();
+                $file->move(public_path() .'/media/FormUpload/', $filename);
+                $uploaded_file = env('APP_URL') .'/media/FormUpload/'. $filename;
+            }
+        }
+
 		/** @noinspection PhpVoidFunctionResultUsedInspection */
 		$send = Mail::send(config('larrock-form.'. $request->get('form') .'.emailTemplate', 'larrock::emails.formDefault'),
             [
-                'data' => $request->except(config('larrock-form.'. $request->get('form') .'.emailDataExcept', ['g-recaptcha-response', '_token', 'form'])),
-                'form' => $request->get('form')
+                'data' => $request->except(config('larrock-form.'. $request->get('form') .'.emailDataExcept', ['g-recaptcha-response', '_token', 'form', 'file'])),
+                'form' => $request->get('form'),
+                'uploaded_file' => $uploaded_file
             ],
 			function($message) use ($mails, $request){
 				$message->from(config('larrock-form.'. $request->get('form') .'.emailFrom'), env('MAIL_TO_ADMIN_NAME', 'ROBOT'));
