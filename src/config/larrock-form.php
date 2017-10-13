@@ -1,5 +1,10 @@
 <?php
 
+$rule_captcha = ['g-recaptcha-response' => ''];
+if(env('INVISIBLE_RECAPTCHA_SITEKEY')){
+    $rule_captcha = ['g-recaptcha-response' => 'required|captcha'];
+}
+
 return [
     'backphone' => [
         'name' => 'Заказать звонок',
@@ -15,7 +20,7 @@ return [
             'name' => 'required',
             'contact' => 'required',
             'agree' => 'required',
-            'g-recaptcha-response' => 'required|captcha'
+            $rule_captcha
         ]
     ]
 ];

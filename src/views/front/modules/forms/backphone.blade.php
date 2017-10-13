@@ -12,7 +12,9 @@
         </label>
     </div>
     <div class="uk-form-row uk-text-right">
-        @captcha()
+        @if(env('INVISIBLE_RECAPTCHA_SITEKEY'))
+            @captcha()
+        @endif
         {{ csrf_field() }}
         <input type="hidden" name="form" value="backphone">
         <button type="submit" class="uk-button uk-button-primary">Перезвонить мне</button>
