@@ -2,12 +2,9 @@
 
 namespace Larrock\ComponentContact;
 
-use Alert;
-use App\Models\FormsLog;
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Request;
-
 use App\Http\Controllers\Controller;
+use Session;
 use Validator;
 use Mail;
 
@@ -36,7 +33,7 @@ class ContactController extends Controller
         }
 
 		/** @noinspection PhpVoidFunctionResultUsedInspection */
-		$send = Mail::send(config('larrock-form.'. $request->get('form') .'.emailTemplate', 'larrock::emails.formDefault'),
+		Mail::send(config('larrock-form.'. $request->get('form') .'.emailTemplate', 'larrock::emails.formDefault'),
             [
                 'data' => $request->except(config('larrock-form.'. $request->get('form') .'.emailDataExcept', ['g-recaptcha-response', '_token', 'form', 'file'])),
                 'form' => $request->get('form'),
@@ -47,8 +44,8 @@ class ContactController extends Controller
 				$message->to($mails);
 				$message->subject(config('larrock-form.'. $request->get('form') .'.emailSubject'));
 			});
-		
-		Alert::add('success', config('larrock-form.'. $request->get('form') .'.emailSuccessMessage'))->flash();
+
+        Session::push('message.success', config('larrock-form.'. $request->get('form') .'.emailSuccessMessage'));
 		return back();
 	}
 }
