@@ -4,6 +4,7 @@ namespace Larrock\ComponentContact;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Larrock\ComponentContact\Models\FormsLog;
 use Session;
 use Validator;
 use Mail;
@@ -31,6 +32,11 @@ class ContactController extends Controller
                 $uploaded_file = env('APP_URL') .'/media/FormUpload/'. $filename;
             }
         }
+
+        $formsLog = new FormsLog();
+        $formsLog['form_name'] = config('larrock-form.'. $request->get('form') .'.name', 'Форма');
+        $formsLog['form_data'] = $request->except(config('larrock-form.'. $request->get('form') .'.emailDataExcept', ['g-recaptcha-response', '_token', 'form', 'file']));
+        $formsLog->save();
 
 		/** @noinspection PhpVoidFunctionResultUsedInspection */
 		Mail::send(config('larrock-form.'. $request->get('form') .'.emailTemplate', 'larrock::emails.formDefault'),

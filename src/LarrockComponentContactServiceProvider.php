@@ -16,6 +16,7 @@ class LarrockComponentContactServiceProvider extends ServiceProvider
         $this->loadRoutesFrom(__DIR__.'/routes.php');
         $this->loadViewsFrom(__DIR__.'/views', 'larrock');
         $this->loadTranslationsFrom(__DIR__.'/lang', 'larrock');
+        $this->loadMigrationsFrom(__DIR__.'/database/migrations');
 
         $this->publishes([
             __DIR__.'/lang' => resource_path('lang/vendor/larrock')
