@@ -8,18 +8,14 @@ class FormsLog extends Model
 {
     protected $searchable = [
         'columns' => [
-            'forms_log.form_name' => 10,
+            'forms_log.title' => 15,
             'forms_log.form_data' => 10,
         ]
     ];
 
     protected $table = 'forms_log';
 
-    protected $fillable = ['from_id', 'form_name', 'form_data', 'form_status'];
-
-    protected $casts = [
-        'form_id' => 'integer'
-    ];
+    protected $fillable = ['form_name', 'title', 'form_data', 'form_status'];
 
     protected $dates = ['created_at', 'updated_at'];
 

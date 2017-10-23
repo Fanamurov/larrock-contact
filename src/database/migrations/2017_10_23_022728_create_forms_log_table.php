@@ -16,9 +16,9 @@ class CreateFormsLogTable extends Migration
         Schema::create('forms_log', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('form_id')->nullable()->index();
-            $table->char('form_name')->nullable()->index();
+            $table->char('title')->nullable()->index();
             $table->text('form_data');
-            $table->char('form_status')->default('new')->index();
+            $table->char('form_status')->default('Новая')->index();
             $table->timestamps();
         });
     }

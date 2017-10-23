@@ -39,5 +39,10 @@ class LarrockComponentContactServiceProvider extends ServiceProvider
     public function register()
     {
         $this->mergeConfigFrom( __DIR__.'/config/larrock-form.php', 'larrock-form');
+
+        $this->app->singleton('larrockcontact', function() {
+            $class = config('larrock.components.contact', ContactComponent::class);
+            return new $class;
+        });
     }
 }
