@@ -1,4 +1,4 @@
-<p style="    color: #808080;
+<p style="color: #808080;
     font-family: Arial, sans-serif;
     font-size: 12px;
     line-height: 150%;">680007, Хабаровский край, г. Хабаровск, ул. Шевчука, 22 В, литер З

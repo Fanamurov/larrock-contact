@@ -1,3 +1,4 @@
+@extends('larrock::emails.template.header')
 @extends('larrock::emails.template.body')
 
 @section('content')
@@ -13,9 +14,11 @@
     margin-right: 0;
     margin-bottom: 10px;
     margin-left: 0;
-    text-align: left;">{{ config('larrock-form.'. Request::get('form') .'.emailSubject', 'Отправлена форма') }}</h1>
+    text-align: left;">{{ array_get($form['email'], 'subject', 'Отправлена форма с сайта '. env('SITE_NAME', env('APP_URL'))) }}</h1>
     @foreach($data as $key => $value)
-        <p style="font:14px/16px Calibri,Helvetica,Arial,sans-serif;">@lang('larrock::fields.'. $key): <strong>{{ $value }}</strong></p>
+        @if( !empty($value))
+            <p style="font:14px/16px Calibri,Helvetica,Arial,sans-serif;">@lang('larrock::fields.'. $key): <strong>{{ $value }}</strong></p>
+        @endif
     @endforeach
 @endsection
 

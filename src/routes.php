@@ -15,11 +15,11 @@ if(file_exists(base_path(). '/vendor/fanamurov/larrock-discount')){
 }
 
 Route::group(['middleware' => $middlewares], function(){
-    Route::post('/forms/send', [
+    Route::any('/form/send/{param?}', [
         'as' => 'submit.form', 'uses' => ContactController::class .'@send_form'
     ]);
 });
 
-Route::group(['prefix' => 'admin', 'middleware'=> ['web', 'level:2', 'LarrockAdminMenu', 'SaveAdminPluginsData', 'SiteSearchAdmin']], function(){
+Route::group(['prefix' => 'admin', 'middleware'=> ['web', 'level:2', 'LarrockAdminMenu', 'SaveAdminPluginsData']], function(){
     Route::resource('contact', AdminContactController::class);
 });

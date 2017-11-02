@@ -2,5 +2,7 @@
 
 return [
     'name' => 'Name',
-    'contact' => 'Contact'
+    'contact' => 'Contact',
+    'email' => 'Email',
+    'tel' => 'Phone',
 ];

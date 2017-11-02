@@ -3,6 +3,7 @@
 namespace Larrock\ComponentContact;
 
 use Illuminate\Support\ServiceProvider;
+use Larrock\ComponentContact\Middleware\ContactCreateTemplate;
 
 class LarrockComponentContactServiceProvider extends ServiceProvider
 {
@@ -39,6 +40,8 @@ class LarrockComponentContactServiceProvider extends ServiceProvider
     public function register()
     {
         $this->mergeConfigFrom( __DIR__.'/config/larrock-form.php', 'larrock-form');
+
+        $this->app['router']->aliasMiddleware('ContactCreateTemplate', ContactCreateTemplate::class);
 
         $this->app->singleton('larrockcontact', function() {
             $class = config('larrock.components.contact', ContactComponent::class);
