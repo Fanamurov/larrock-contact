@@ -29,8 +29,8 @@ class ContactController extends Controller
             Session::push('message.danger', 'Конфигурация формы не найдена');
         }
 
-        if(array_get($form,'redirect') && array_get($form['redirect'],'url')){
-            return redirect($form['redirect']['url']);
+        if(array_has($form,'redirect')){
+            return redirect($form['redirect']);
         }
         return back();
     }

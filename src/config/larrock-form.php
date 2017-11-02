@@ -56,11 +56,7 @@ return [
 
         'form_class' => 'form_backphone', //css-класс формы
 
-        /*'redirect' => [ //куда перенаправлять после отправки письма
-            'url' => '/test', //url перенаправления
-            'message' => 'Спасибо за заявку' //Текст сообщения на странице
-        ],*/
-
+        'redirect' => '/test', //куда перенаправлять после отправки письма
         'debugMail' => FALSE, //Отрисовка тела шаблона письма вместо его отправки. Для дебага
         'render' => TRUE //Если FALSE, то не обрабатывается ContactCreateTemplate Middleware
     ],
@@ -114,10 +110,7 @@ return [
         'action' => '/form/send', //form action
         'method' => 'post', //form method
 
-        'redirect' => [ //куда перенаправлять после отправки письма
-            'url' => '/test', //url перенаправления
-            'message' => 'Спасибо за заявку' //Текст сообщения на странице
-        ],
+        'redirect' => '/test' //куда перенаправлять после отправки письма
 
         'debugMail' => TRUE, //Отрисовка тела шаблона письма вместо его отправки. Для дебага
         'render' => TRUE //Если FALSE, то не обрабатывается ContactCreateTemplate Middleware
