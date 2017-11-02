@@ -70,7 +70,8 @@ return [
             'email' => [ //поле
                 'type' => 'input', //тип поля (input,tel,email, select и т.д.)
                 'title' => 'Email (не обязательно)', //Заголовок поля (label)
-                'css_class' => 'input', //css-класс для поля
+                'css_class' => 'input', //css-класс для поля,
+                'css_class_row' => 'row', //css-класс для всего блока с полем
             ],
             'tel' => [
                 'type' => 'tel',
