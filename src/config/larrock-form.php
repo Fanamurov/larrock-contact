@@ -6,7 +6,7 @@ if(env('INVISIBLE_RECAPTCHA_SITEKEY')){
 }
 
 return [
-    'minimal' => [
+    /*'minimal' => [
         'rows' => [ //поля формы
             'tel' => [
                 'type' => 'tel',
@@ -17,15 +17,13 @@ return [
                 'title' => 'Получить коммерческое предложение'
             ]
         ]
-    ],
+    ],*/
     'backphone' => [ //форма
         'name' => 'Подайте заявку', //название формы
-        //'view' => 'larrock::front.modules.forms.backphone', //шаблон письма (по-умолчанию: larrock::emails.formDefault)
         'rows' => [ //поля формы
             'email' => [ //поле
                 'type' => 'input', //тип поля (input,tel,email, select и т.д.)
                 'title' => 'Email (не обязательно)', //Заголовок поля (label)
-                //'css_class' => 'input', //css-класс для поля
             ],
             'tel' => [
                 'type' => 'tel',
@@ -42,12 +40,10 @@ return [
         ],
 
         'email' => [
-            //'from' => 'no-reply@'. array_get($_SERVER, 'HTTP_HOST'), //email "от кого", по-умолчанию env('MAIL_FROM_ADDRESS')
             'dataExcept' => ['agree'], //что не передавать в шаблон email
             'successMessage' => 'Отправлена форма заявки '. env('SITE_NAME', env('APP_URL')), //сообщение об успешной отправке
             'subject' => 'Отправлена форма заявки '. env('SITE_NAME', env('APP_URL')), //тема письма
             'to' => 'fanamurov@ya.ru', //кому присылать письма, через запятую (по-умолчанию: env('MAIL_TO_ADMIN'))
-            //'from_name' => 'Имя адресата', //от кого присылать письма, по-умолчанию: MAIL_FROM_NAME
             'template' => 'larrock::emails.formDefault', //шаблон письма
         ],
 
@@ -58,19 +54,14 @@ return [
             $rule_captcha
         ], //правила валидации
 
-        //'form_class' => 'form_backphone', //css-класс формы
+        'form_class' => 'form_backphone', //css-класс формы
 
-        'forms_log' => FALSE, //сохранять ли письма в БД
-
-        'action' => '/form/send', //form action
-        'method' => 'post', //form method
-
-        'redirect' => [ //куда перенаправлять после отправки письма
-            //'url' => '/test', //url перенаправления
+        /*'redirect' => [ //куда перенаправлять после отправки письма
+            'url' => '/test', //url перенаправления
             'message' => 'Спасибо за заявку' //Текст сообщения на странице
-        ],
+        ],*/
 
-        'debugMail' => TRUE, //Отрисовка тела шаблона письма вместо его отправки. Для дебага
+        'debugMail' => FALSE, //Отрисовка тела шаблона письма вместо его отправки. Для дебага
         'render' => TRUE //Если FALSE, то не обрабатывается ContactCreateTemplate Middleware
     ],
 
