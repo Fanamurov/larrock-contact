@@ -106,7 +106,11 @@ class ContactController extends Controller
     public function mail($form, Request $request, $uploaded_file)
     {
         if(env('MAIL_STOP') !== TRUE){
-            $mails = array_map('trim', explode(',', $form['email']['to']));
+            $to = env('MAIL_TO_ADMIN');
+            if(isset($form['email']['to'])){
+                $to = $form['email']['to'];
+            }
+            $mails = array_map('trim', explode(',', $to));
             if($request->has('email') && !empty($request->get('email'))){
                 $mails[] = $request->get('email');
             }
