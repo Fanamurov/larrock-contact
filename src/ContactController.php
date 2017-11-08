@@ -114,9 +114,8 @@ class ContactController extends Controller
             $mails = array_unique($mails);
 
             /** @noinspection PhpVoidFunctionResultUsedInspection */
-            Mail::send([
-                array_get($form['email'], 'template', 'larrock::emails.formDefault') =>
-                    array_get($form['email'], 'from_name', env('MAIL_FROM_NAME'))],
+            Mail::send(
+                array_get($form['email'], 'template', 'larrock::emails.formDefault'),
                 [
                     'data' => $request->except($this->exceptMailData($form)),
                     'form' => $form,
