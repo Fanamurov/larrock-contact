@@ -3,20 +3,24 @@
 namespace Larrock\ComponentContact;
 
 use Breadcrumbs;
+use Illuminate\Routing\Controller;
 use Larrock\ComponentContact\Facades\LarrockContact;
-use Larrock\Core\AdminController;
+use Larrock\Core\Traits\AdminMethodsDestroy;
+use Larrock\Core\Traits\AdminMethodsIndex;
 
-class AdminContactController extends AdminController
+class AdminContactController extends Controller
 {
-	public function __construct()
-	{
-	    $this->config = LarrockContact::shareConfig();
+    use AdminMethodsIndex, AdminMethodsDestroy;
 
-		\Config::set('breadcrumbs.view', 'larrock::admin.breadcrumb.breadcrumb');
+    public function __construct()
+    {
+        $this->config = LarrockContact::shareConfig();
+
+        \Config::set('breadcrumbs.view', 'larrock::admin.breadcrumb.breadcrumb');
         Breadcrumbs::register('admin.'. LarrockContact::getName() .'.index', function($breadcrumbs){
             $breadcrumbs->push(LarrockContact::getTitle(), '/admin/'. LarrockContact::getName());
         });
-	}
+    }
 
     public function edit($id)
     {
