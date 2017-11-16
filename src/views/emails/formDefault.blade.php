@@ -1,4 +1,3 @@
-@extends('larrock::emails.template.header')
 @extends('larrock::emails.template.body')
 
 @section('content')
