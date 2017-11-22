@@ -11,6 +11,11 @@ use Mail;
 
 class ContactController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(LarrockPages::combineFrontMiddlewares());
+    }
+
     public function send_form(Request $request)
     {
         if($form = config('larrock-form.'. $request->get('form_id'))){
