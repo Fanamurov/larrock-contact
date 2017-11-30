@@ -3,9 +3,12 @@
 namespace Larrock\ComponentContact\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Larrock\Core\Traits\GetLink;
 
 class FormsLog extends Model
 {
+    use GetLink;
+    
     protected $searchable = [
         'columns' => [
             'forms_log.title' => 15,
