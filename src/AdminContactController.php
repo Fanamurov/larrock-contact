@@ -15,8 +15,8 @@ class AdminContactController extends Controller
     public function __construct()
     {
         $this->config = LarrockContact::shareConfig();
-
         \Config::set('breadcrumbs.view', 'larrock::admin.breadcrumb.breadcrumb');
+
         Breadcrumbs::register('admin.'. LarrockContact::getName() .'.index', function($breadcrumbs){
             $breadcrumbs->push(LarrockContact::getTitle(), '/admin/'. LarrockContact::getName());
         });
@@ -34,9 +34,9 @@ class AdminContactController extends Controller
 
         $data['emailData'] = view($template, ['data' => $data['data']->form_data])->render();
 
-        Breadcrumbs::register('admin.'. $this->config->name .'.edit', function($breadcrumbs, $data)
+        Breadcrumbs::register('admin.'. LarrockContact::getName() .'.edit', function($breadcrumbs, $data)
         {
-            $breadcrumbs->parent('admin.'. $this->config->name .'.index');
+            $breadcrumbs->parent('admin.'. LarrockContact::getName() .'.index');
             $breadcrumbs->push($data->title);
         });
 
