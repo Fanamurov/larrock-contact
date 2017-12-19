@@ -2,7 +2,7 @@
     <table align="center" border="0" cellpadding="0" cellspacing="0" height="100%" width="100%" style="background-color: #dcdcdc; height: 100% !important;
     margin: 0;
     padding: 0;
-    width: 100% !important; border-collapse: collapse !important; margin-bottom: 50px;">
+    width: 100% !important; border-collapse: collapse !important;">
         <tr>
             <td align="center" valign="top">
                 <!-- BEGIN TEMPLATE // -->

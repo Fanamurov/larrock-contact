@@ -7,7 +7,8 @@
                     <p style="    color: #808080;
     font-family: Arial, sans-serif;
     font-size: 12px;
-    line-height: 150%;">680009, Хабаровский край г. Хабаровск, ул. Промышленная, 12г, оф. 10
+    line-height: 150%;">{{ env('SITE_NAME') }} <a href="{{ env('APP_URL') }}" target="_blank">{{ env('APP_URL') }}</a><br/>
+    680009, Хабаровский край г. Хабаровск, ул. Промышленная, 12г, оф. 10
                         <br>Телефон/факc:&nbsp;<a href="tel:+74212944151">+7 (4212) 94-41-51</a>,
                         <br/>Email:&nbsp;<a href="mailto:stormelectric@mail.ru">stormelectric@mail.ru</a>
                     </p>
