@@ -7,13 +7,15 @@ use Illuminate\Routing\Controller;
 use Larrock\ComponentContact\Facades\LarrockContact;
 use Larrock\Core\Traits\AdminMethodsDestroy;
 use Larrock\Core\Traits\AdminMethodsIndex;
+use Larrock\Core\Traits\ShareMethods;
 
 class AdminContactController extends Controller
 {
-    use AdminMethodsIndex, AdminMethodsDestroy;
+    use AdminMethodsIndex, AdminMethodsDestroy, ShareMethods;
 
     public function __construct()
     {
+        $this->shareMethods();
         $this->config = LarrockContact::shareConfig();
         \Config::set('breadcrumbs.view', 'larrock::admin.breadcrumb.breadcrumb');
 
