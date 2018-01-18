@@ -16,6 +16,7 @@ class AdminContactController extends Controller
     public function __construct()
     {
         $this->shareMethods();
+        $this->middleware(LarrockContact::combineAdminMiddlewares());
         $this->config = LarrockContact::shareConfig();
         \Config::set('breadcrumbs.view', 'larrock::admin.breadcrumb.breadcrumb');
 
