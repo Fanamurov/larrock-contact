@@ -2,6 +2,7 @@
 
 namespace Larrock\ComponentContact;
 
+use Cache;
 use Larrock\ComponentContact\Facades\LarrockContact;
 use Larrock\ComponentContact\Models\FormsLog;
 use Larrock\Core\Component;
@@ -42,18 +43,19 @@ class ContactComponent extends Component
 
     public function renderAdminMenu()
     {
-        $count = \Cache::remember('count-data-admin-'. LarrockContact::getName(), 1440, function(){
+        $count = Cache::rememberForever('count-data-admin-'. LarrockContact::getName(), function(){
             return LarrockContact::getModel()->count(['id']);
         });
-        $count_new = \Cache::remember('count-new-data-admin-'. LarrockContact::getName(), 1440, function(){
+        $count_new = Cache::rememberForever('count-new-data-admin-'. LarrockContact::getName(), function(){
             return LarrockContact::getModel()->whereFormStatus('Новая')->count(['id']);
         });
-        return view('larrock::admin.sectionmenu.types.default', ['count' => $count .'/'. $count_new, 'app' => LarrockContact::getConfig(), 'url' => '/admin/'. LarrockContact::getName()]);
+        return view('larrock::admin.sectionmenu.types.default', ['count' => $count .'/'. $count_new,
+            'app' => LarrockContact::getConfig(), 'url' => '/admin/'. LarrockContact::getName()]);
     }
 
     public function toDashboard()
     {
-        $data = \Cache::remember('LarrockContactItems', 1440, function(){
+        $data = Cache::rememberForever('LarrockContactItems', function(){
             return LarrockContact::getModel()->get();
         });
         return view('larrock::admin.dashboard.formslog', ['component' => LarrockContact::getConfig(), 'data' => $data]);

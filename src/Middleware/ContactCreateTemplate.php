@@ -10,7 +10,6 @@ class ContactCreateTemplate
 {
     /**
      * Handle an incoming request.
-     *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Closure  $next
      * @return mixed
@@ -19,7 +18,7 @@ class ContactCreateTemplate
     {
         $forms = config('larrock-form');
         foreach ($forms as $key => $form){
-            if(is_array($form) && isset($form['rows']) && array_get($form, 'render', TRUE) === TRUE){
+            if(\is_array($form) && isset($form['rows']) && array_get($form, 'render', TRUE) === TRUE){
                 $render = Cache::remember('contactForm'. $key, 1440, function() use ($form, $key){
                     $jsValidation = NULL;
                     if(array_has($form, 'rules')){
@@ -34,11 +33,17 @@ class ContactCreateTemplate
         return $next($request);
     }
 
+    /**
+     * @param $form
+     * @param $form_key
+     * @param null $jsValidation
+     * @return string
+     * @throws \Throwable
+     */
     protected function contactBuilder($form, $form_key, $jsValidation = NULL)
     {
         $content['url'] = \URL::current();
         $form_id = $form_key;
-
         $view_name = 'larrock::front.ContactBuilder.form';
         if(array_key_exists('view', $form) && View::exists($form['view'])){
             $view_name = $form['view'];

@@ -13,6 +13,10 @@ class AdminContactController extends Controller
 {
     use AdminMethodsIndex, AdminMethodsDestroy, ShareMethods;
 
+    /**
+     * AdminContactController constructor.
+     * @throws \DaveJamesMiller\Breadcrumbs\Facades\DuplicateBreadcrumbException
+     */
     public function __construct()
     {
         $this->shareMethods();
@@ -25,6 +29,12 @@ class AdminContactController extends Controller
         });
     }
 
+    /**
+     * @param $id
+     * @return array|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @throws \DaveJamesMiller\Breadcrumbs\Facades\DuplicateBreadcrumbException
+     * @throws \Throwable
+     */
     public function edit($id)
     {
         $data['data'] = $this->config->getModel()::findOrFail($id);
