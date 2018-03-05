@@ -30,13 +30,13 @@ class ContactComponent extends Component
         $row = new FormSelect('form_status', 'Статус формы');
         $this->rows['form_status'] = $row->setValid('max:255')->setAllowCreate()
             ->setOptions(['Новая', 'Обработано', 'Завершено'])
-            ->setInTableAdminAjaxEditable()->setCssClassGroup('uk-width-1-1 uk-width-medium-1-3');
+            ->setInTableAdminAjaxEditable()->setCssClassGroup('uk-width-1-1 uk-width-1-3@m');
 
         $row = new FormDate('created_at', 'Дата получения');
-        $this->rows['created_at'] = $row->setInTableAdmin()->setCssClassGroup('uk-width-1-1 uk-width-medium-1-3');
+        $this->rows['created_at'] = $row->setInTableAdmin()->setCssClassGroup('uk-width-1-1 uk-width-1-3@m');
 
         $row = new FormDate('updated_at', 'Дата обработки');
-        $this->rows['updated_at'] = $row->setInTableAdmin()->setCssClassGroup('uk-width-1-1 uk-width-medium-1-3');
+        $this->rows['updated_at'] = $row->setInTableAdmin()->setCssClassGroup('uk-width-1-1 uk-width-1-3@m');
 
         return $this;
     }
@@ -55,8 +55,8 @@ class ContactComponent extends Component
 
     public function toDashboard()
     {
-        $data = Cache::rememberForever('LarrockContactItems', function(){
-            return LarrockContact::getModel()->get();
+        $data = Cache::rememberForever('LarrockContactItemsDashboard', function(){
+            return LarrockContact::getModel()->latest('updated_at')->take(5)->get();
         });
         return view('larrock::admin.dashboard.formslog', ['component' => LarrockContact::getConfig(), 'data' => $data]);
     }
