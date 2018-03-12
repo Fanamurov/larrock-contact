@@ -120,7 +120,7 @@ class ContactController extends Controller
             if($request->has('email') && !empty($request->get('email'))){
                 $mails[] = $request->get('email');
             }
-            $admin_mails = explode(',', env('MAIL_TO_ADMIN', 'robot@martds.ru'));
+            $admin_mails = explode(',', env('MAIL_TO_ADMIN'));
             $mails = array_merge($admin_mails, $mails);
             $mails = array_unique($mails);
 
