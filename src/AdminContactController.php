@@ -2,7 +2,6 @@
 
 namespace Larrock\ComponentContact;
 
-use Breadcrumbs;
 use Illuminate\Routing\Controller;
 use Larrock\ComponentContact\Facades\LarrockContact;
 use Larrock\Core\Traits\AdminMethodsDestroy;
@@ -15,7 +14,6 @@ class AdminContactController extends Controller
 
     /**
      * AdminContactController constructor.
-     * @throws \DaveJamesMiller\Breadcrumbs\Facades\DuplicateBreadcrumbException
      */
     public function __construct()
     {
@@ -23,16 +21,11 @@ class AdminContactController extends Controller
         $this->middleware(LarrockContact::combineAdminMiddlewares());
         $this->config = LarrockContact::shareConfig();
         \Config::set('breadcrumbs.view', 'larrock::admin.breadcrumb.breadcrumb');
-
-        Breadcrumbs::register('admin.'. LarrockContact::getName() .'.index', function($breadcrumbs){
-            $breadcrumbs->push(LarrockContact::getTitle(), '/admin/'. LarrockContact::getName());
-        });
     }
 
     /**
      * @param $id
      * @return array|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     * @throws \DaveJamesMiller\Breadcrumbs\Facades\DuplicateBreadcrumbException
      * @throws \Throwable
      */
     public function edit($id)
@@ -46,13 +39,6 @@ class AdminContactController extends Controller
         }
 
         $data['emailData'] = view($template, ['data' => $data['data']->form_data])->render();
-
-        Breadcrumbs::register('admin.'. LarrockContact::getName() .'.edit', function($breadcrumbs, $data)
-        {
-            $breadcrumbs->parent('admin.'. LarrockContact::getName() .'.index');
-            $breadcrumbs->push($data->title);
-        });
-
         return view('larrock::admin.contact.edit', $data);
     }
 }

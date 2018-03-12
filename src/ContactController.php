@@ -8,6 +8,7 @@ use Larrock\ComponentContact\Models\FormsLog;
 use Session;
 use Validator;
 use Mail;
+use LarrockPages;
 
 class ContactController extends Controller
 {
