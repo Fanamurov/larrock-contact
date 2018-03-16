@@ -14,20 +14,20 @@ class LarrockComponentContactServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->loadRoutesFrom(__DIR__.'/routes.php');
-        $this->loadViewsFrom(__DIR__.'/views', 'larrock');
-        $this->loadTranslationsFrom(__DIR__.'/lang', 'larrock');
-        $this->loadMigrationsFrom(__DIR__.'/database/migrations');
+        $this->loadViewsFrom(__DIR__.'/../views', 'larrock');
+        $this->loadTranslationsFrom(__DIR__.'/../lang', 'larrock');
+        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
 
         $this->publishes([
-            __DIR__.'/lang' => resource_path('lang/vendor/larrock')
+            __DIR__.'/../lang' => resource_path('lang/vendor/larrock')
         ], 'lang');
 
         $this->publishes([
-            __DIR__.'/views' => base_path('resources/views/vendor/larrock')
+            __DIR__.'/../views' => base_path('resources/views/vendor/larrock')
         ], 'views');
 
         $this->publishes([
-            __DIR__.'/config/larrock-form.php' => config_path('larrock-form.php')
+            __DIR__.'/../config/larrock-form.php' => config_path('larrock-form.php')
         ], 'config');
     }
 
