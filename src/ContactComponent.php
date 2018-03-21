@@ -30,7 +30,7 @@ class ContactComponent extends Component
         $row = new FormSelect('form_status', 'Статус формы');
         $this->rows['form_status'] = $row->setValid('max:255')->setAllowCreate()
             ->setOptions(['Новая', 'Обработано', 'Завершено'])
-            ->setInTableAdminAjaxEditable()->setCssClassGroup('uk-width-1-1 uk-width-1-3@m');
+            ->setInTableAdminEditable()->setCssClassGroup('uk-width-1-1 uk-width-1-3@m');
 
         $row = new FormDate('created_at', 'Дата получения');
         $this->rows['created_at'] = $row->setInTableAdmin()->setCssClassGroup('uk-width-1-1 uk-width-1-3@m');
