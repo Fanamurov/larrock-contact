@@ -18,6 +18,7 @@ class CreateFormsLogTable extends Migration
             $table->integer('form_id')->nullable()->index();
             $table->char('title', 191)->nullable()->index();
             $table->text('form_data');
+            $table->char('form_name', 191);
             $table->char('form_status', 191)->default('Новая')->index();
             $table->timestamps();
         });

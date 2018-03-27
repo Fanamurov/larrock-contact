@@ -3,56 +3,70 @@
 namespace Larrock\ComponentContact;
 
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
+use Illuminate\Routing\Controller;
+use Larrock\ComponentContact\Facades\LarrockContact;
+use Larrock\ComponentContact\Helpers\LarrockForm;
 use Larrock\ComponentContact\Models\FormsLog;
-use Session;
+use Larrock\Core\Helpers\MessageLarrock;
 use Validator;
 use Mail;
-use LarrockPages;
 
 class ContactController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(LarrockPages::combineFrontMiddlewares());
+        $this->middleware(LarrockContact::combineFrontMiddlewares());
     }
 
-    public function send_form(Request $request)
+    /**
+     * Экшен отправки форм
+     *
+     * @param Request $request
+     * @param $formName
+     * @return \Illuminate\Http\RedirectResponse|string
+     * @throws \Exception
+     * @throws \Throwable
+     */
+    public function sendForm(Request $request, $formName)
     {
-        if($form = config('larrock-form.'. $request->get('form_id'))){
-            if( !isset($form['email'])){
-                $form['email']['to'] = env('MAIL_TO_ADMIN');
-                $form['email']['dataExcept'] = [];
-            }
-            $this->validateForm($form, $request);
-            if(array_get($form, 'debugMail', FALSE) === TRUE){
-                return $this->debugMail($form, $request);
-            }
-            $uploaded_file = $this->uploadFile($form, $request);
-            $this->formLog($form, $request);
-            $this->mail($form, $request, $uploaded_file);
-        }else{
-            Session::push('message.danger', 'Конфигурация формы не найдена');
+        $larrockContact = LarrockContact::shareConfig();
+
+        /** @var LarrockForm $form */
+        $form = $larrockContact->getForm($formName);
+
+        $this->validateForm($form, $request);
+
+        if($form->debugMail){
+            return $form->renderMail($request->except($form->exceptRender));
         }
 
-        if(array_has($form,'redirect')){
-            return redirect($form['redirect']);
+        if( !$form->mailFromAddress){
+            throw new \Exception('mailFromAddress не определен', 422);
+        }
+
+        //$uploaded_file = $this->uploadFile($form, $request);
+        $uploaded_file = null;
+        $this->formLog($form, $request);
+        $this->mail($form, $request, $uploaded_file);
+
+        if($form->redirect){
+            return redirect()->to($form->redirect);
         }
         return back();
     }
 
 
     /**
-     * Создание JSValidation formRequest
+     * Валидация данных формы
      *
-     * @param $form
+     * @param LarrockForm $form
      * @param Request $request
      * @return $this|bool
      */
     public function validateForm($form, Request $request)
     {
-        if(array_has($form, 'rules')){
-            $validator = Validator::make($request->all(), $form['rules']);
+        if($form->valid){
+            $validator = Validator::make($request->all(), $form->valid);
             if($validator->fails()){
                 return back()->withInput($request->except('password'))->withErrors($validator);
             }
@@ -67,11 +81,12 @@ class ContactController extends Controller
      * TODO: Добавить проверку нужна ли вообще загрузка,
      * TODO: проверка загружаемого файла по расширениям
      * TODO: помещение в папку недоступную для открытия с фронта (security)
-     * @param $form
+     * @param LarrockForm $form
      * @param Request $request
      * @return null|string
+     * @throws \Symfony\Component\HttpFoundation\File\Exception\FileException
      */
-    protected function uploadFile($form, Request $request)
+    protected function uploadFile(LarrockForm $form, Request $request)
     {
         if($request->hasFile('file')) {
             $file = $request->file('file');
@@ -88,15 +103,16 @@ class ContactController extends Controller
     /**
      * Логирование отправленных данных в БД FormsLog
      *
-     * @param $form
+     * @param LarrockForm $form
      * @param Request $request
      */
-    protected function formLog($form, Request $request)
+    protected function formLog(LarrockForm $form, Request $request)
     {
-        if(config('larrock-form.forms_log', TRUE) === TRUE && array_get($form, 'forms_log', 'TRUE') === TRUE){
+        if($form->formLog){
             $formsLog = new FormsLog();
-            $formsLog['title'] = array_get($form, 'name', 'Форма');
-            $formsLog['form_data'] = $request->except($this->exceptMailData($form));
+            $formsLog['title'] = $form->title;
+            $formsLog['form_data'] = $request->all();
+            $formsLog['form_name'] = $form->name;
             $formsLog->save();
         }
     }
@@ -105,42 +121,36 @@ class ContactController extends Controller
     /**
      * Отправка письма
      *
-     * @param $form
+     * @param LarrockForm $form
      * @param Request $request
      * @param $uploaded_file
+     * @return bool
+     * @throws \Exception
      */
-    public function mail($form, Request $request, $uploaded_file)
+    public function mail(LarrockForm $form, Request $request, $uploaded_file)
     {
         if(env('MAIL_STOP') !== TRUE){
-            $to = env('MAIL_TO_ADMIN');
-            if(isset($form['email']['to'])){
-                $to = $form['email']['to'];
-            }
-            $mails = array_map('trim', explode(',', $to));
+            $mails = array_map('trim', explode(',', $form->mailFromAddress));
             if($request->has('email') && !empty($request->get('email'))){
                 $mails[] = $request->get('email');
             }
-            $admin_mails = explode(',', env('MAIL_TO_ADMIN'));
-            $mails = array_merge($admin_mails, $mails);
             $mails = array_unique($mails);
 
             /** @noinspection PhpVoidFunctionResultUsedInspection */
-            Mail::send(
-                array_get($form['email'], 'template', 'larrock::emails.formDefault'),
-                [
-                    'data' => $request->except($this->exceptMailData($form)),
+            Mail::send($form->mailTemplate, [
+                    'data' => $request->except($form->exceptRender),
                     'form' => $form,
                     'uploaded_file' => $uploaded_file
-                ],
-                function($message) use ($mails, $form){
-                    $message->from(array_get($form['email'], 'from', env('MAIL_FROM_ADDRESS')));
+                ], function($message) use ($mails, $form){
+                    $message->from($form->mailFromAddress);
                     $message->to($mails);
-                    $message->subject(array_get($form['email'], 'subject', 'Отправлена форма '. env('APP_URL')));
+                    $message->subject($form->mailSubject);
                 });
-            Session::push('message.success', array_get($form['email'], 'successMessage', 'Форма отправлена. '. env('SITE_NAME', env('APP_URL'))));
+            MessageLarrock::success($form->messageSuccess);
         }else{
-            Session::push('message.danger', 'Отправка писем отключена опцией MAIL_STOP');
+            MessageLarrock::danger('Отправка писем отключена опцией MAIL_STOP', TRUE);
         }
+        return TRUE;
     }
 
 
@@ -153,8 +163,7 @@ class ContactController extends Controller
      */
     public function debugMail($form, Request $request)
     {
-        return view(array_get($form['email'], 'template', 'larrock::emails.formDefault'),
-            [
+        return view($form->template, [
                 'data' => $request->except($this->exceptMailData($form)),
                 'form' => $form,
                 'uploaded_file' => 'Загрузка файла в дебаге отключена'

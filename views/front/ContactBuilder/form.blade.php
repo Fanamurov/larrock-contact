@@ -1,17 +1,15 @@
-<form id="form{{ $form_id }}" class="{{ array_get($form, 'form_class') }} uk-form"
-      method="{{ array_get($form, 'method', 'post') }}" action="{{ array_get($form, 'action', '/form/send') }}">
-    @foreach($form['rows'] as $key => $input)
-        @if(\View::exists('larrock::front.ContactBuilder.rows.'. $input['type']))
-            @include('larrock::front.ContactBuilder.rows.'. $input['type'], ['row' => $input, 'name' => $key])
-        @else
-            @include('larrock::front.ContactBuilder.rows.input', ['row' => $input, 'name' => $key])
-        @endif
+<form id="form{{ $form->name }}" class="uk-form {{ $form->formClass }}"
+      method="{{ $form->method }}" action="{{ $form->action }}">
+    @foreach($form->rows as $key => $input)
+        {!! $input !!}
     @endforeach
     <input type="hidden" name="page_title" value="">
     <input type="hidden" name="page_url" value="">
     <input type="hidden" name="page_id" value="">
-    <input type="hidden" name="form_id" value="{{ $form_id }}">
+    <input type="hidden" name="form_id" value="form{{ $form->name }}">
     {{ csrf_field() }}
 </form>
 
-{!! $jsValidation !!}
+@if(isset($jsValidation))
+    {!! $jsValidation !!}
+@endif

@@ -7,10 +7,18 @@
                     <p style="    color: #808080;
     font-family: Arial, sans-serif;
     font-size: 12px;
-    line-height: 150%;">{{ env('SITE_NAME') }} <a href="{{ env('APP_URL') }}" target="_blank">{{ env('APP_URL') }}</a><br/>
-    680009, Хабаровский край г. Хабаровск, ул. Промышленная, 12г, оф. 10
-                        <br>Телефон/факc:&nbsp;<a href="tel:+74212944151">+7 (4212) 94-41-51</a>,
-                        <br/>Email:&nbsp;<a href="mailto:stormelectric@mail.ru">stormelectric@mail.ru</a>
+    line-height: 150%;">{{ env('SITE_NAME') }} <a href="{{ env('APP_URL') }}" target="_blank">{{ env('APP_URL') }}</a>
+                        @if(env('MAIL_TEMPLATE_ADDRESS'))
+                            <br/>Адрес: {{ env('MAIL_TEMPLATE_ADDRESS') }}
+                        @endif
+                        @if(env('MAIL_TEMPLATE_PHONE'))
+                            <br>Телефон/факc: {{ env('MAIL_TEMPLATE_PHONE') }}
+                        @endif
+                        @if(env('MAIL_TEMPLATE_MAIL'))
+                            <br/>Email:&nbsp;<a href="mailto:{{ env('MAIL_TEMPLATE_MAIL') }}">{{ env('MAIL_TEMPLATE_MAIL') }}</a>
+                        @else
+                            <br/>Email:&nbsp;<a href="mailto:{{ env('MAIL_TO_ADMIN') }}">{{ env('MAIL_TO_ADMIN') }}</a>
+                        @endif
                     </p>
                 </td>
             </tr>
