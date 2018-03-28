@@ -8,7 +8,7 @@ trait MailableFormTrait
     public $debugMail;
 
     /** @var array Какие поля отправленные формой не нужно обрабатывать в шаблоне письма */
-    public $exceptRender = ['g-recaptcha-response', '_token', 'form_id', 'file'];
+    public $exceptRender = ['g-recaptcha-response', '_token', 'form_id'];
 
     /** @var string Шаблон для письма */
     public $mailTemplate = 'larrock::emails.formDefault';

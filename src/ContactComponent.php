@@ -11,6 +11,7 @@ use Larrock\Core\Component;
 use Larrock\Core\Helpers\FormBuilder\FormButton;
 use Larrock\Core\Helpers\FormBuilder\FormCheckbox;
 use Larrock\Core\Helpers\FormBuilder\FormDate;
+use Larrock\Core\Helpers\FormBuilder\FormFile;
 use Larrock\Core\Helpers\FormBuilder\FormInput;
 use Larrock\Core\Helpers\FormBuilder\FormSelect;
 
@@ -56,6 +57,8 @@ class ContactComponent extends Component
         $row = new FormInput('tel', 'Телефон');
         $form->setRow($row->setValid('required'));
         $row = new FormButton('send', 'Отправить');
+        $form->setRow($row);
+        $row = new FormFile('file', 'Загрузка файлов');
         $form->setRow($row);
 
         $this->forms->push($form);

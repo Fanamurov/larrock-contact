@@ -68,7 +68,13 @@
                                     {{ str_limit($data_value->full_url, 35, '...') }}
                                 </a>
                                 @foreach(collect($data_value->form_data)->take(3) as $value)
-                                    {{ $value }}@if( !$loop->last), @else... @endif
+                                    @if(\is_string($value)) {{ $value }} @endif
+                                    @if(\is_array($value))
+                                        @foreach($value as $val)
+                                            {{ $val }}
+                                        @endforeach
+                                    @endif
+                                    @if( !$loop->last), @else... @endif
                                 @endforeach
                             </td>
                         @endif

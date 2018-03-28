@@ -30,9 +30,7 @@ class AdminContactController extends Controller
      */
     public function index()
     {
-        //Получаем созданные формы
         $data['forms'] = LarrockContact::getForms();
-
         $data['data'] = $this->config->getModel()::orderBy('created_at', 'DESC')->paginate(30);
         return view('larrock::admin.contact.index', $data);
     }
@@ -45,19 +43,17 @@ class AdminContactController extends Controller
     public function edit($id)
     {
         $data['data'] = $this->config->getModel()::findOrFail($id);
-        $data['app'] = $this->config->tabbable($data['data']);
 
         $template = 'larrock::emails.formDefault';
         if($form_name = $data['data']->form_name){
-            $template = config('larrock-form.'. $form_name .'.emailTemplate', 'larrock::emails.formDefault');
+            $template = LarrockContact::getForm($form_name)->mailTemplate;
         }
 
         /** @var LarrockForm $form */
         $form = $this->config->getForm($data['data']->form_name);
-
         $formData = collect($data['data']->form_data);
 
-        $data['emailData'] = view($template, ['data' => $formData->except($form->exceptRender), 'form' => $form])->render();
+        $data['emailData'] = view($template, ['data' => $formData->except($form->exceptRender), 'form' => $form, 'uploaded_files' => $data['data']->form_files])->render();
         return view('larrock::admin.contact.edit', $data);
     }
 }

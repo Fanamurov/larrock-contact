@@ -40,7 +40,7 @@ class LarrockForm
     public $template = 'larrock::front.ContactBuilder.form';
 
     /** @var bool|null Использовать ли captcha */
-    public $captha;
+    public $captcha;
 
     /** @var null|array Правила валидации формы */
     public $valid;
@@ -128,7 +128,7 @@ class LarrockForm
      */
     public function setCaptcha()
     {
-        $this->captha = TRUE;
+        $this->captcha = TRUE;
     }
 
     /**
