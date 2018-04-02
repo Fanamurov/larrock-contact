@@ -2,12 +2,11 @@
 
 namespace Larrock\ComponentContact\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Larrock\Core\Traits\GetLink;
+use Illuminate\Database\Eloquent\Model;
 
 /**
- * Class FormsLog
- * @package Larrock\ComponentContact\Models
+ * Class FormsLog.
  * @property int $id
  * @property int $form_id
  * @property string $title
@@ -21,12 +20,12 @@ use Larrock\Core\Traits\GetLink;
 class FormsLog extends Model
 {
     use GetLink;
-    
+
     protected $searchable = [
         'columns' => [
             'forms_log.title' => 15,
             'forms_log.form_data' => 10,
-        ]
+        ],
     ];
 
     protected $table = 'forms_log';
@@ -50,7 +49,8 @@ class FormsLog extends Model
         $this->attributes['form_files'] = json_encode($value);
     }
 
-    public function getFormFilesAttribute($value){
+    public function getFormFilesAttribute($value)
+    {
         return json_decode($value);
     }
 }

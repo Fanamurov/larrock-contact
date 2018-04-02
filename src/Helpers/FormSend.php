@@ -2,18 +2,18 @@
 
 namespace Larrock\ComponentContact\Helpers;
 
-use Illuminate\Http\Request;
-use Larrock\ComponentContact\Models\FormsLog;
-use Larrock\Core\Helpers\FormBuilder\FormButton;
-use Larrock\Core\Helpers\FormBuilder\FormFile;
-use Larrock\Core\Helpers\MessageLarrock;
-use Validator;
 use Mail;
+use Validator;
+use Illuminate\Http\Request;
+use Larrock\Core\Helpers\MessageLarrock;
+use Larrock\ComponentContact\Models\FormsLog;
+use Larrock\Core\Helpers\FormBuilder\FormFile;
+use Larrock\Core\Helpers\FormBuilder\FormButton;
 
 class FormSend
 {
     /**
-     * Валидация данных формы
+     * Валидация данных формы.
      *
      * @param LarrockForm $form
      * @param Request $request
@@ -21,18 +21,18 @@ class FormSend
      */
     public function validateForm($form, Request $request)
     {
-        if($form->valid){
+        if ($form->valid) {
             $validator = Validator::make($request->all(), $form->valid);
-            if($validator->fails()){
+            if ($validator->fails()) {
                 return $validator;
             }
         }
-        return TRUE;
+
+        return true;
     }
 
-
     /**
-     * Загрузка файла из формы
+     * Загрузка файла из формы.
      *
      * @param LarrockForm $form
      * @param Request $request
@@ -41,28 +41,28 @@ class FormSend
      */
     public function uploadFile(LarrockForm $form, Request $request)
     {
-        if(\is_array($form->rows)){
+        if (\is_array($form->rows)) {
             $uploaded_files = [];
-            foreach ($form->rows as $row){
-                if($row instanceof FormFile && $request->hasFile($row->name)){
+            foreach ($form->rows as $row) {
+                if ($row instanceof FormFile && $request->hasFile($row->name)) {
                     $file = $request->file($row->name);
-                    if($file->isValid()){
-                        $filename = date('Ymd-hsi') . random_int(0, 999999) . $file->getClientOriginalName();
-                        $file->move(public_path() .'/media/FormUpload/', $filename);
-                        $uploaded_files[$row->name][] = env('APP_URL') .'/media/FormUpload/'. $filename;
+                    if ($file->isValid()) {
+                        $filename = date('Ymd-hsi').random_int(0, 999999).$file->getClientOriginalName();
+                        $file->move(public_path().'/media/FormUpload/', $filename);
+                        $uploaded_files[$row->name][] = env('APP_URL').'/media/FormUpload/'.$filename;
                     }
                 }
             }
-            if(\count($uploaded_files) > 0){
+            if (\count($uploaded_files) > 0) {
                 return $uploaded_files;
             }
         }
-        return NULL;
+
+        return null;
     }
 
-
     /**
-     * Логирование отправленных данных в БД FormsLog
+     * Логирование отправленных данных в БД FormsLog.
      *
      * @param LarrockForm $form
      * @param Request $request
@@ -70,11 +70,12 @@ class FormSend
      */
     public function formLog(LarrockForm $form, Request $request, $uploaded_files = null)
     {
-        if($form->formLog){
-            $data = array_filter($request->except($form->exceptRender), function ($value){
-                if($value !== null && ! empty($value)){
+        if ($form->formLog) {
+            $data = array_filter($request->except($form->exceptRender), function ($value) {
+                if ($value !== null && ! empty($value)) {
                     return $value;
                 }
+
                 return null;
             });
 
@@ -82,16 +83,15 @@ class FormSend
             $formsLog['title'] = $form->title;
             $formsLog['form_data'] = $data;
             $formsLog['form_name'] = $form->name;
-            if($uploaded_files && \is_array($uploaded_files)){
+            if ($uploaded_files && \is_array($uploaded_files)) {
                 $formsLog['form_files'] = $uploaded_files;
             }
             $formsLog->save();
         }
     }
 
-
     /**
-     * Отправка письма
+     * Отправка письма.
      *
      * @param LarrockForm $form
      * @param Request $request
@@ -101,33 +101,33 @@ class FormSend
      */
     public function mail(LarrockForm $form, Request $request, $uploaded_files)
     {
-        if(env('MAIL_STOP') !== TRUE){
+        if (env('MAIL_STOP') !== true) {
             $mails = array_map('trim', explode(',', $form->mailFromAddress));
-            if($request->has('email') && !empty($request->get('email'))){
+            if ($request->has('email') && ! empty($request->get('email'))) {
                 $mails[] = $request->get('email');
             }
             $mails = array_unique($mails);
 
-            /** @noinspection PhpVoidFunctionResultUsedInspection */
+            /* @noinspection PhpVoidFunctionResultUsedInspection */
             Mail::send($form->mailTemplate, [
                 'data' => $request->except($form->exceptRender),
                 'form' => $form,
-                'uploaded_files' => $uploaded_files
-            ], function($message) use ($mails, $form){
+                'uploaded_files' => $uploaded_files,
+            ], function ($message) use ($mails, $form) {
                 $message->from($form->mailFromAddress);
                 $message->to($mails);
                 $message->subject($form->mailSubject);
             });
             MessageLarrock::success($form->messageSuccess);
-        }else{
-            MessageLarrock::danger('Отправка писем отключена опцией MAIL_STOP', TRUE);
+        } else {
+            MessageLarrock::danger('Отправка писем отключена опцией MAIL_STOP', true);
         }
-        return TRUE;
+
+        return true;
     }
 
-
     /**
-     * Отрисовка тела шаблона письма вместо его отправки. Для дебага
+     * Отрисовка тела шаблона письма вместо его отправки. Для дебага.
      *
      * @param LarrockForm $form
      * @param null|array $data
@@ -139,13 +139,12 @@ class FormSend
         return view($form->mailTemplate, [
             'data' => $data,
             'form' => $form,
-            'uploaded_files' => $uploaded_files
+            'uploaded_files' => $uploaded_files,
         ]);
     }
 
-
     /**
-     * Получение списка полей, которые не следует передавать в шаблон письма
+     * Получение списка полей, которые не следует передавать в шаблон письма.
      *
      * @param $form
      * @return array
@@ -154,11 +153,12 @@ class FormSend
     {
         $except_mail_data = array_get($form['email'], 'dataExcept');
         $except_service_data = ['g-recaptcha-response', '_token', 'form_id'];
-        foreach ($form->rows as $row){
-            if($row instanceof FormButton || $row instanceof FormFile){
+        foreach ($form->rows as $row) {
+            if ($row instanceof FormButton || $row instanceof FormFile) {
                 $except_service_data[] = $row->name;
             }
         }
+
         return array_merge($except_mail_data, $except_service_data);
     }
 }

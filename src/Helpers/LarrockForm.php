@@ -31,10 +31,10 @@ class LarrockForm
     public $redirect;
 
     /** @var bool|null */
-    public $isRender = TRUE;
+    public $isRender = true;
 
     /** @var bool|null Логировать данные отправленных через форму */
-    public $formLog = TRUE;
+    public $formLog = true;
 
     /** @var bool|null Кастомный шаблон для формы */
     public $template = 'larrock::front.ContactBuilder.form';
@@ -54,16 +54,16 @@ class LarrockForm
     {
         $this->name = $name;
         $this->title = $title;
-        $this->action = '/form/send/'. $this->name;
-        $this->messageSuccess = 'Форма отправлена. '. env('SITE_NAME', env('APP_URL'));
-        $this->messageDanger = 'Форма не отправлена. '. env('SITE_NAME', env('APP_URL'));
-        $this->mailSubject = $this->title .' '. env('SITE_NAME', env('APP_URL'));
+        $this->action = '/form/send/'.$this->name;
+        $this->messageSuccess = 'Форма отправлена. '.env('SITE_NAME', env('APP_URL'));
+        $this->messageDanger = 'Форма не отправлена. '.env('SITE_NAME', env('APP_URL'));
+        $this->mailSubject = $this->title.' '.env('SITE_NAME', env('APP_URL'));
         $this->mailFromName = env('SITE_NAME');
         $this->mailFromAddress = env('MAIL_FROM_ADDRESS');
     }
 
     /**
-     * Установка form action
+     * Установка form action.
      * @param string $typeAction
      */
     public function setAction(string $typeAction)
@@ -72,7 +72,7 @@ class LarrockForm
     }
 
     /**
-     * Установка form method
+     * Установка form method.
      * @param string $method
      */
     public function setMethod(string $method)
@@ -81,7 +81,7 @@ class LarrockForm
     }
 
     /**
-     * Установка css-класса для формы
+     * Установка css-класса для формы.
      * @param string $cssClass
      */
     public function setFormClass(string $cssClass)
@@ -90,7 +90,7 @@ class LarrockForm
     }
 
     /**
-     * Установка url куда перенаправлять после отправки письма
+     * Установка url куда перенаправлять после отправки письма.
      * @param $url
      */
     public function setRedirect($url)
@@ -99,7 +99,7 @@ class LarrockForm
     }
 
     /**
-     * Не обрабатывать через ContactCreateTemplate Middleware
+     * Не обрабатывать через ContactCreateTemplate Middleware.
      */
     public function setNotRender()
     {
@@ -107,15 +107,15 @@ class LarrockForm
     }
 
     /**
-     * Не логировать данные отправленных через форму
+     * Не логировать данные отправленных через форму.
      */
     public function setNotFormLog()
     {
-        $this->formLog = TRUE;
+        $this->formLog = true;
     }
 
     /**
-     * Установка view для формы
+     * Установка view для формы.
      * @param string $view
      */
     public function setView(string $view)
@@ -124,15 +124,15 @@ class LarrockForm
     }
 
     /**
-     * Уставнока каптчи
+     * Уставнока каптчи.
      */
     public function setCaptcha()
     {
-        $this->captcha = TRUE;
+        $this->captcha = true;
     }
 
     /**
-     * Добавление к форме нового поля
+     * Добавление к форме нового поля.
      * @param FBElement $FBElement
      * @return $this
      */
@@ -140,44 +140,48 @@ class LarrockForm
     {
         $this->rows[$FBElement->name] = $FBElement;
         $this->setValid($FBElement);
+
         return $this;
     }
 
     /**
-     * Добавление новых правил валидации из полей
+     * Добавление новых правил валидации из полей.
      * @param FBElement $FBElement
      * @return array|null
      */
     protected function setValid(FBElement $FBElement)
     {
-        if($FBElement->valid){
+        if ($FBElement->valid) {
             $this->valid[$FBElement->name] = $FBElement->valid;
         }
+
         return $this->valid;
     }
 
     /**
-     * Создание объекта js-валидации
+     * Создание объекта js-валидации.
      * @return \Proengsoft\JsValidation\JavascriptValidator
      */
     public function makeJsValidation()
     {
-        if(\is_array($this->valid)){
-            return \JsValidator::make($this->valid, [], [], '#form'. $this->name);
+        if (\is_array($this->valid)) {
+            return \JsValidator::make($this->valid, [], [], '#form'.$this->name);
         }
+
         return null;
     }
 
     /**
-     * Рендеринг формы
+     * Рендеринг формы.
      * @return string
      * @throws \Throwable
      */
     public function __toString()
     {
-        if(view()->exists($this->template)){
+        if (view()->exists($this->template)) {
             return view($this->template, ['form' => $this, 'jsValidation' => $this->makeJsValidation()])->render();
         }
-        return 'Шаблон для формы '. $this->name .'->'. $this->template .' не найден';
+
+        return 'Шаблон для формы '.$this->name.'->'.$this->template.' не найден';
     }
 }

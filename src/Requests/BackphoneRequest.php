@@ -23,6 +23,6 @@ class BackphoneRequest extends FormRequest
      */
     public function rules()
     {
-		return config('larrock-form.backphone.rules');
+        return config('larrock-form.backphone.rules');
     }
 }
