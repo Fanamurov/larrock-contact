@@ -17,7 +17,7 @@ class LarrockComponentContactServiceProvider extends ServiceProvider
         $this->loadViewsFrom(__DIR__.'/../views', 'larrock');
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
         $this->publishes([
-            __DIR__.'/../views' => base_path('resources/views/vendor/larrock')
+            __DIR__.'/../views' => base_path('resources/views/vendor/larrock'),
         ], 'views');
     }
 
@@ -29,8 +29,9 @@ class LarrockComponentContactServiceProvider extends ServiceProvider
     {
         $this->app['router']->aliasMiddleware('ContactCreateTemplate', ContactCreateTemplate::class);
 
-        $this->app->singleton('larrockcontact', function() {
+        $this->app->singleton('larrockcontact', function () {
             $class = config('larrock.components.contact', ContactComponent::class);
+
             return new $class;
         });
     }

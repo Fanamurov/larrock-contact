@@ -2,9 +2,9 @@
 
 namespace Larrock\ComponentContact\Middleware;
 
+use View;
 use Cache;
 use Closure;
-use View;
 use Larrock\ComponentContact\Facades\LarrockContact;
 
 class ContactCreateTemplate
@@ -20,8 +20,8 @@ class ContactCreateTemplate
         $forms = Cache::rememberForever('CreateFormsContact', function () {
             return LarrockContact::getForms();
         });
-        foreach ($forms as $form){
-            View::share('form_'. $form->name, (string)$form);
+        foreach ($forms as $form) {
+            View::share('form_'.$form->name, (string) $form);
         }
 
         return $next($request);

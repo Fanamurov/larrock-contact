@@ -3,17 +3,17 @@
 namespace Larrock\ComponentContact;
 
 use Cache;
-use Illuminate\Support\Collection;
-use Larrock\ComponentContact\Facades\LarrockContact;
-use Larrock\ComponentContact\Helpers\LarrockForm;
-use Larrock\ComponentContact\Models\FormsLog;
 use Larrock\Core\Component;
-use Larrock\Core\Helpers\FormBuilder\FormButton;
-use Larrock\Core\Helpers\FormBuilder\FormCheckbox;
+use Illuminate\Support\Collection;
+use Larrock\ComponentContact\Models\FormsLog;
 use Larrock\Core\Helpers\FormBuilder\FormDate;
 use Larrock\Core\Helpers\FormBuilder\FormFile;
 use Larrock\Core\Helpers\FormBuilder\FormInput;
+use Larrock\Core\Helpers\FormBuilder\FormButton;
 use Larrock\Core\Helpers\FormBuilder\FormSelect;
+use Larrock\ComponentContact\Helpers\LarrockForm;
+use Larrock\Core\Helpers\FormBuilder\FormCheckbox;
+use Larrock\ComponentContact\Facades\LarrockContact;
 
 class ContactComponent extends Component
 {
@@ -90,21 +90,23 @@ class ContactComponent extends Component
 
     public function renderAdminMenu()
     {
-        $count = Cache::rememberForever('count-data-admin-'. LarrockContact::getName(), function(){
+        $count = Cache::rememberForever('count-data-admin-'.LarrockContact::getName(), function () {
             return LarrockContact::getModel()->count(['id']);
         });
-        $count_new = Cache::rememberForever('count-new-data-admin-'. LarrockContact::getName(), function(){
+        $count_new = Cache::rememberForever('count-new-data-admin-'.LarrockContact::getName(), function () {
             return LarrockContact::getModel()->whereFormStatus('Новая')->count(['id']);
         });
-        return view('larrock::admin.sectionmenu.types.default', ['count' => $count .'/'. $count_new,
-            'app' => LarrockContact::getConfig(), 'url' => '/admin/'. LarrockContact::getName()]);
+
+        return view('larrock::admin.sectionmenu.types.default', ['count' => $count.'/'.$count_new,
+            'app' => LarrockContact::getConfig(), 'url' => '/admin/'.LarrockContact::getName(), ]);
     }
 
     public function toDashboard()
     {
-        $data = Cache::rememberForever('LarrockContactItemsDashboard', function(){
+        $data = Cache::rememberForever('LarrockContactItemsDashboard', function () {
             return LarrockContact::getModel()->latest('updated_at')->take(5)->get();
         });
+
         return view('larrock::admin.dashboard.formslog', ['component' => LarrockContact::getConfig(), 'data' => $data]);
     }
 }

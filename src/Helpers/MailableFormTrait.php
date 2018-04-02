@@ -29,15 +29,15 @@ trait MailableFormTrait
     public $mailFromName;
 
     /**
-     * Отрисовка тела шаблона письма вместо его отправки. Для дебага
+     * Отрисовка тела шаблона письма вместо его отправки. Для дебага.
      */
     public function setDebugMail()
     {
-        $this->debugMail = TRUE;
+        $this->debugMail = true;
     }
 
     /**
-     * Какие поля ну нежно обрабатывать в шаблоне письма
+     * Какие поля ну нежно обрабатывать в шаблоне письма.
      * @param array $exceptRender Массив названий полей формы
      */
     public function setExceptRender(array $exceptRender)
@@ -46,46 +46,50 @@ trait MailableFormTrait
     }
 
     /**
-     * Установка сообщения пользователю в интерфейсе об успешной отправке формы
+     * Установка сообщения пользователю в интерфейсе об успешной отправке формы.
      * @param string $message
      * @return $this
      */
     public function setMessageSuccess(string $message)
     {
         $this->messageSuccess = $message;
+
         return $this;
     }
 
     /**
-     * Установка сообщения пользователю в интерфейсе о невозможности отправки формы
+     * Установка сообщения пользователю в интерфейсе о невозможности отправки формы.
      * @param string $message
      * @return $this
      */
     public function setMessageDanger(string $message)
     {
         $this->messageDanger = $message;
+
         return $this;
     }
 
     /**
-     * Уставновка шаблона для письма
+     * Уставновка шаблона для письма.
      * @param string $template
      * @return $this
      */
     public function setMailTemplate(string $template)
     {
         $this->mailTemplate = $template;
+
         return $this;
     }
 
     /**
-     * Установка заголовка и темы письма
+     * Установка заголовка и темы письма.
      * @param string $subject
      * @return $this
      */
     public function setMailSubject(string $subject)
     {
         $this->mailSubject = $subject;
+
         return $this;
     }
 
@@ -97,17 +101,19 @@ trait MailableFormTrait
     public function setMailFromAddress(string $address)
     {
         $this->mailFromAddress = $address;
+
         return $this;
     }
 
     /**
-     * Установка имени отправителя в письме
+     * Установка имени отправителя в письме.
      * @param string $name
      * @return $this
      */
     public function setMailFromName(string $name)
     {
         $this->mailFromName = $name;
+
         return $this;
     }
 
@@ -118,9 +124,9 @@ trait MailableFormTrait
      */
     public function renderMail($request)
     {
-        if(view()->exists($this->mailTemplate)){
+        if (view()->exists($this->mailTemplate)) {
             return view($this->mailTemplate, ['form' => $this, 'data' => $request])->render();
         }
-        throw new \Exception('Шаблон для письма формы '. $this->name .' не определен');
+        throw new \Exception('Шаблон для письма формы '.$this->name.' не определен');
     }
 }

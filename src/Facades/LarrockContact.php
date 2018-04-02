@@ -13,5 +13,4 @@ class LarrockContact extends Facade
     {
         return 'larrockcontact';
     }
-
 }
