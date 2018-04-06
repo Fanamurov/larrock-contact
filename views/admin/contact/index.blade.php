@@ -1,11 +1,11 @@
 @extends('larrock::admin.main')
-@section('title') {{ $app->name }} admin @endsection
+@section('title') {{ $package->name }} admin @endsection
 
 @section('content')
     <div class="container-head uk-margin-bottom">
         <div class="uk-grid">
             <div class="uk-width-expand">
-                {!! Breadcrumbs::render('admin.'. $app->name .'.index') !!}
+                {!! Breadcrumbs::render('admin.'. $package->name .'.index') !!}
             </div>
             <div class="uk-width-auto"></div>
         </div>
@@ -31,10 +31,10 @@
                 <thead>
                 <tr>
                     <th width="55"></th>
-                    @if(isset($app->rows['title']))
-                        <th>{{ $app->rows['title']->title }}</th>
+                    @if(isset($package->rows['title']))
+                        <th>{{ $package->rows['title']->title }}</th>
                     @endif
-                    @foreach($app->rows as $row)
+                    @foreach($package->rows as $row)
                         @if($row->inTableAdmin || $row->inTableAdminEditable)
                             <th style="width: 90px" class="uk-visible@s">{{ $row->title }}</th>
                         @endif
@@ -45,14 +45,14 @@
                 <tbody class="uk-sortable" data-uk-sortable="{handleClass:'uk-sortable-handle'}">
                 <tr class="tr-massiveAction">
                     <td colspan="6">
-                        @include('larrock::admin.admin-builder.massive-action', ['data' => $data, 'app' => $app->name, 'formId' => 'massiveAction'])
+                        @include('larrock::admin.admin-builder.massive-action', ['data' => $data, 'app' => $package->name, 'formId' => 'massiveAction'])
                     </td>
                 </tr>
                 @foreach($data as $data_value)
                     <tr>
                         <td width="55">
                             <div class="actionSelect" data-target="massiveAction" data-id="{{ $data_value->id }}">
-                                @if($app->plugins_backend && array_key_exists('images', $app->plugins_backend)
+                                @if($package->plugins_backend && array_key_exists('images', $package->plugins_backend)
                                 && $image = $data_value->getMedia('images')->sortByDesc('order_column')->first())
                                     <img src="{{ $image->getUrl('110x110') }}">
                                 @else
@@ -60,9 +60,9 @@
                                 @endif
                             </div>
                         </td>
-                        @if(isset($app->rows['title']))
+                        @if(isset($package->rows['title']))
                             <td>
-                                <a class="uk-h4" href="/admin/{{ $app->name }}/{{ $data_value->id }}/edit">{{ $data_value->title }}</a>
+                                <a class="uk-h4" href="/admin/{{ $package->name }}/{{ $data_value->id }}/edit">{{ $data_value->title }}</a>
                                 <br/>
                                 <a class="link-to-front" target="_blank" href="{{ $data_value->full_url }}" title="ссылка на элемент на сайте">
                                     {{ str_limit($data_value->full_url, 35, '...') }}
@@ -78,18 +78,18 @@
                                 @endforeach
                             </td>
                         @endif
-                        @foreach($app->rows as $row)
+                        @foreach($package->rows as $row)
                             @if($row->inTableAdminEditable)
                                 @if($row instanceof \Larrock\Core\Helpers\FormBuilder\FormCheckbox)
                                     <td class="row-active uk-visible@s">
                                         <div class="uk-button-group btn-group_switch_ajax" role="group" style="width: 100%">
                                             <button type="button" class="uk-button uk-button-primary uk-button-small
                                                     @if($data_value->{$row->name} === 0) uk-button-outline @endif"
-                                                    data-row_where="id" data-value_where="{{ $data_value->id }}" data-table="{{ $app->table }}"
+                                                    data-row_where="id" data-value_where="{{ $data_value->id }}" data-table="{{ $package->table }}"
                                                     data-row="active" data-value="1" style="width: 50%">on</button>
                                             <button type="button" class="uk-button uk-button-danger uk-button-small
                                                     @if($data_value->{$row->name} === 1) uk-button-outline @endif"
-                                                    data-row_where="id" data-value_where="{{ $data_value->id }}" data-table="{{ $app->table }}"
+                                                    data-row_where="id" data-value_where="{{ $data_value->id }}" data-table="{{ $package->table }}"
                                                     data-row="active" data-value="0" style="width: 50%">off</button>
                                         </div>
                                     </td>
@@ -98,7 +98,7 @@
                                         <input type="text" value="{{ $data_value->{$row->name} }}" name="{{ $row->name }}"
                                                class="ajax_edit_row form-control uk-input uk-form-small"
                                                data-row_where="id" data-value_where="{{ $data_value->id }}"
-                                               data-table="{{ $app->table }}">
+                                               data-table="{{ $package->table }}">
                                         @if($row->name === 'position')
                                             <i class="uk-sortable-handle uk-icon uk-icon-bars uk-margin-small-right" title="Перенести материал по весу"></i>
                                         @endif
@@ -107,7 +107,7 @@
                                     <td class="uk-visible@s">
                                         <select class="ajax_edit_row form-control uk-select uk-form-small"
                                                 data-row_where="id" data-value_where="{{ $data_value->id }}"
-                                                data-table="{{ $app->table }}" data-row="{{ $row->name }}">
+                                                data-table="{{ $package->table }}" data-row="{{ $row->name }}">
                                             @foreach($row->options as $option)
                                                 <option @if($option === $data_value->{$row->name}) selected @endif value="{{ $option }}">{{ $option }}</option>
                                             @endforeach
