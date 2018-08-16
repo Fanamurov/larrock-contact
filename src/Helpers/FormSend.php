@@ -102,14 +102,14 @@ class FormSend
     public function mail(LarrockForm $form, Request $request, $uploaded_files)
     {
         if (env('MAIL_STOP') !== true) {
-            $mails = array_map('trim', explode(',', $form->mailFromAddress));
+            $mails = array_map('trim', explode(',', env('MAIL_TO_ADMIN')));
             if ($request->has('email') && ! empty($request->get('email'))) {
                 $mails[] = $request->get('email');
             }
             $mails = array_unique($mails);
 
             /* @noinspection PhpVoidFunctionResultUsedInspection */
-            Mail::send($form->mailTemplate, [
+            $test = Mail::send($form->mailTemplate, [
                 'data' => $request->except($form->exceptRender),
                 'form' => $form,
                 'uploaded_files' => $uploaded_files,
